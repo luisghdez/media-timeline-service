@@ -21,6 +21,8 @@ class MediaInfo:
     frame_rate: float | None
     format_start_time: float = 0.0
     audio_start_time: float = 0.0
+    width: int | None = None
+    height: int | None = None
 
     @property
     def audio_offset(self) -> float:
@@ -50,7 +52,7 @@ def probe(path: Path) -> MediaInfo:
             "-v",
             "error",
             "-show_entries",
-            "format=duration,start_time:stream=codec_type,codec_name,sample_rate,channels,r_frame_rate,start_time",
+            "format=duration,start_time:stream=codec_type,codec_name,sample_rate,channels,r_frame_rate,start_time,width,height",
             "-of",
             "json",
             str(path),
@@ -69,6 +71,8 @@ def probe(path: Path) -> MediaInfo:
         frame_rate=_parse_rate(video.get("r_frame_rate")),
         format_start_time=float(payload["format"].get("start_time", 0)),
         audio_start_time=float(audio.get("start_time", payload["format"].get("start_time", 0))),
+        width=int(video["width"]) if video.get("width") else None,
+        height=int(video["height"]) if video.get("height") else None,
     )
 
 

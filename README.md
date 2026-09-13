@@ -219,3 +219,26 @@ wan3 outputs/arise_artifacts/vocals.wav -o outputs/wan3/result.json
 
 Defaults: `480p`, `16:9`, silent video, and a streamer-reaction prompt. Optional form/CLI fields: `prompt`, `resolution`, `aspect_ratio`, `seed`, and `webhook_url` on `/v1/jobs`.
 
+## Stacked 9:16 compositor
+
+Local ffmpeg module. Video 1 is cover-cropped into the top quarter of a 9:16 canvas; video 2 fills the remaining three-quarters and supplies the audio. Duration is the shorter of the two inputs (`-shortest`). Requires `ffmpeg`/`ffprobe` on `PATH`.
+
+```bash
+.venv/bin/vstack \
+  outputs/wan3/4Gc0J02OcI2zqLSJZhYLQ_wzuxbFLv.mp4 \
+  inputs/1/ddtik.com_@Arise_no_watermark.mp4 \
+  -o outputs/vstack/arise_stack.mp4
+```
+
+HTTP:
+
+```bash
+uvicorn vstack.api:app --host 127.0.0.1 --port 8003
+curl -s http://127.0.0.1:8003/v1/compose \
+  -F 'video1=@overlay.mp4' \
+  -F 'video2=@main.mp4' \
+  -o stacked.mp4
+```
+
+`--resolution` is `1080p` (1080x1920) by default, or `720p` (720x1280).
+

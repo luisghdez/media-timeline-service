@@ -39,6 +39,7 @@ media-timeline = "media_timeline.cli:main"
 media-timeline-benchmark = "media_timeline.benchmark:main"
 seedance = "seedance.cli:main"
 wan3 = "wan3.cli:main"
+vstack = "vstack.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
