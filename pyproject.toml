@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "media-timeline-service"
+version = "0.1.0"
+description = "Confidence-scored multimodal audio timelines for short-form video"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "python-multipart>=0.0.20",
+  "uvicorn[standard]>=0.34",
+]
+
+[project.optional-dependencies]
+asr = ["faster-whisper>=1.2"]
+events = ["torch>=2.1", "transformers>=4.48", "soundfile>=0.12", "numpy>=1.26"]
+separation = ["demucs>=4.0"]
+all = [
+  "faster-whisper>=1.2",
+  "torch>=2.1",
+  "transformers>=4.48",
+  "soundfile>=0.12",
+  "numpy>=1.26",
+  "demucs>=4.0",
+]
+seedance = ["fal-client>=0.7", "python-dotenv>=1.0"]
+dev = ["pytest>=8.0", "httpx>=0.28", "fal-client>=0.7", "python-dotenv>=1.0"]
+
+[project.scripts]
+media-timeline = "media_timeline.cli:main"
+seedance = "seedance.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

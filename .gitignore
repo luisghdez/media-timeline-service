@@ -1,0 +1,12 @@
+.cache/
+.pytest_cache/
+__pycache__/
+*.egg-info/
+.venv/
+work/
+.env
+.DS_Store
+
+# Local media and pipeline artifacts
+inputs/
+outputs/
