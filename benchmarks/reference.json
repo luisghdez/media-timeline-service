@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "timebase": "source_playback_seconds",
+  "clips": [
+    {
+      "id": "clip-001",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/1/ddtik.com_@Arise_no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    },
+    {
+      "id": "clip-002",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/2/ddtik.com_@bravik_5_no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    },
+    {
+      "id": "clip-003",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/3/ddtik.com_@h _no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    },
+    {
+      "id": "clip-004",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/4/ddtik.com_@JuzLogann_no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    },
+    {
+      "id": "clip-005",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/5/ddtik.com_@Total War Roblox_no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    },
+    {
+      "id": "clip-006",
+      "source": "/Users/luisg/Developer/personal/media-timeline-service/inputs/6/ddtik.com_@Nova_no_watermark.mp4",
+      "reviewed": false,
+      "tags": [],
+      "words": [],
+      "reactions": [],
+      "delivery": []
+    }
+  ]
+}

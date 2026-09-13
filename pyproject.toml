@@ -16,7 +16,10 @@ dependencies = [
 
 [project.optional-dependencies]
 asr = ["faster-whisper>=1.2"]
-events = ["torch>=2.1", "transformers>=4.48", "soundfile>=0.12", "numpy>=1.26"]
+verbatim = ["crisperwhisper[transformers]>=2.0.2", "soundfile>=0.12"]
+alignment = ["whisperx>=3.8"]
+delivery = ["transformers>=4.51", "qwen-omni-utils", "accelerate>=1.0", "soundfile>=0.12", "scipy>=1.11"]
+events = ["scipy>=1.11", "torch>=2.1", "transformers>=4.48", "soundfile>=0.12", "numpy>=1.26"]
 separation = ["demucs>=4.0"]
 all = [
   "faster-whisper>=1.2",
@@ -25,13 +28,17 @@ all = [
   "soundfile>=0.12",
   "numpy>=1.26",
   "demucs>=4.0",
+  "scipy>=1.11",
 ]
 seedance = ["fal-client>=0.7", "python-dotenv>=1.0"]
+wan3 = ["fal-client>=0.7", "python-dotenv>=1.0"]
 dev = ["pytest>=8.0", "httpx>=0.28", "fal-client>=0.7", "python-dotenv>=1.0"]
 
 [project.scripts]
 media-timeline = "media_timeline.cli:main"
+media-timeline-benchmark = "media_timeline.benchmark:main"
 seedance = "seedance.cli:main"
+wan3 = "wan3.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

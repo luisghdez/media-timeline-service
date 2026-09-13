@@ -19,6 +19,12 @@ class MediaInfo:
     sample_rate: int | None
     channels: int | None
     frame_rate: float | None
+    format_start_time: float = 0.0
+    audio_start_time: float = 0.0
+
+    @property
+    def audio_offset(self) -> float:
+        return self.audio_start_time - self.format_start_time
 
 
 def run(command: list[str], *, timeout: int = 600) -> subprocess.CompletedProcess[str]:
@@ -44,7 +50,7 @@ def probe(path: Path) -> MediaInfo:
             "-v",
             "error",
             "-show_entries",
-            "format=duration:stream=codec_type,codec_name,sample_rate,channels,r_frame_rate",
+            "format=duration,start_time:stream=codec_type,codec_name,sample_rate,channels,r_frame_rate,start_time",
             "-of",
             "json",
             str(path),
@@ -61,6 +67,8 @@ def probe(path: Path) -> MediaInfo:
         sample_rate=int(audio["sample_rate"]) if audio.get("sample_rate") else None,
         channels=int(audio["channels"]) if audio.get("channels") else None,
         frame_rate=_parse_rate(video.get("r_frame_rate")),
+        format_start_time=float(payload["format"].get("start_time", 0)),
+        audio_start_time=float(audio.get("start_time", payload["format"].get("start_time", 0))),
     )
 
 
@@ -87,6 +95,8 @@ def extract_audio(source: Path, destination: Path, sample_rate: int = 16_000) ->
             "1",
             "-ar",
             str(sample_rate),
+            "-af",
+            f"asetpts=PTS-STARTPTS,aresample={sample_rate}:async=1:first_pts=0",
             "-c:a",
             "pcm_s16le",
             str(destination),

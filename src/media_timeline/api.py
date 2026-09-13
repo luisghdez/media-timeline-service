@@ -20,6 +20,13 @@ def _env_bool(name: str, default: bool) -> bool:
 app = FastAPI(title="Media Timeline Service", version="0.1.0")
 pipeline = AnalysisPipeline(
     PipelineConfig(
+        asr_backend=os.getenv("MEDIA_TIMELINE_ASR_BACKEND", "whisper"),
+        verbatim_model=os.getenv("MEDIA_TIMELINE_VERBATIM_MODEL", "nyralabs/CrisperWhisper2.0_large"),
+        alignment=os.getenv("MEDIA_TIMELINE_ALIGNMENT", "none"),
+        delivery=os.getenv("MEDIA_TIMELINE_DELIVERY", "acoustic"),
+        delivery_model=os.getenv("MEDIA_TIMELINE_DELIVERY_MODEL", "Qwen/Qwen2.5-Omni-3B"),
+        language=os.getenv("MEDIA_TIMELINE_LANGUAGE", "en"),
+        device=os.getenv("MEDIA_TIMELINE_DEVICE", "cpu"),
         whisper_model=os.getenv("MEDIA_TIMELINE_WHISPER_MODEL", "small.en"),
         model_cache=Path(os.getenv("MEDIA_TIMELINE_MODEL_CACHE", ".cache/media-timeline")),
         use_vocal_separation=_env_bool("MEDIA_TIMELINE_USE_VOCAL_SEPARATION", True),
@@ -29,6 +36,7 @@ pipeline = AnalysisPipeline(
         silence_threshold_db=int(os.getenv("MEDIA_TIMELINE_SILENCE_THRESHOLD_DB", "-42")),
         scene_threshold=float(os.getenv("MEDIA_TIMELINE_SCENE_THRESHOLD", "0.24")),
         event_window_seconds=float(os.getenv("MEDIA_TIMELINE_EVENT_WINDOW_SECONDS", "2.0")),
+        event_threshold=float(os.getenv("MEDIA_TIMELINE_EVENT_THRESHOLD", "0.07")),
         event_hop_seconds=float(os.getenv("MEDIA_TIMELINE_EVENT_HOP_SECONDS", "0.5")),
         vad_filter=_env_bool("MEDIA_TIMELINE_VAD_FILTER", False),
         speech_source=os.getenv("MEDIA_TIMELINE_SPEECH_SOURCE", "both"),

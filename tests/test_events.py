@@ -37,3 +37,28 @@ def test_flat_events_flag_low_confidence_for_review() -> None:
         events=[TimedLayer(0.0, 0.5, Layer(type="vocal_reaction", confidence=0.59))],
     )
     assert result.to_dict()["events"][0]["review_required"] is True
+
+
+def test_multiple_reactions_do_not_imply_emotion():
+    events = _canonical_events([("Gasp", 0.8), ("Laughter", 0.7)])
+    assert len(events) == 2
+    assert all(event[2] is None for event in events)
+
+
+def test_unplaceable_word_stays_in_verbatim_transcript():
+    segment = SimpleNamespace(start=0, end=1, text="oh um gosh", no_speech_prob=0,
+        words=[SimpleNamespace(word=" oh", start=0, end=0.2, probability=0.8),
+               SimpleNamespace(word=" gosh", start=0.5, end=1, probability=0.8)])
+    item = _split_segment(segment, "test")[0]
+    assert item.layer.verbatim_text == "oh um gosh"
+    assert item.layer.words[1].text == "um"
+    assert item.layer.words[1].start is None
+    assert item.layer.needs_review()
+
+
+def test_verbatim_guard_rejects_decode_loop_but_keeps_short_stutter():
+    import pytest
+    from media_timeline.analyzers import _check_verbatim_quality
+    _check_verbatim_quality(SimpleNamespace(text="o o o oh my gosh", duration=2, words=[]))
+    with pytest.raises(ValueError, match="decode loop"):
+        _check_verbatim_quality(SimpleNamespace(text="oh " * 100, duration=10, words=[]))
