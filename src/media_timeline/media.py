@@ -83,7 +83,12 @@ def _parse_rate(value: str | None) -> float | None:
     return float(numerator) / float(denominator)
 
 
-def extract_audio(source: Path, destination: Path, sample_rate: int = 16_000) -> None:
+def extract_audio(
+    source: Path,
+    destination: Path,
+    sample_rate: int = 16_000,
+    channels: int = 1,
+) -> None:
     run(
         [
             "ffmpeg",
@@ -96,7 +101,7 @@ def extract_audio(source: Path, destination: Path, sample_rate: int = 16_000) ->
             "-map",
             "0:a:0",
             "-ac",
-            "1",
+            str(channels),
             "-ar",
             str(sample_rate),
             "-af",

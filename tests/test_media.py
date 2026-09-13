@@ -21,5 +21,22 @@ def test_delayed_audio_keeps_source_offset_after_extraction(tmp_path):
     extract_audio(source, audio)
     waveform, sr = sf.read(audio)
     assert sr == 16000
+    assert waveform.ndim == 1
     assert len(waveform) / sr == pytest.approx(0.5, abs=0.01)
     assert max(abs(waveform[:160])) > 0.05
+
+
+@pytest.mark.skipif(not shutil.which("ffmpeg") or not shutil.which("ffprobe"), reason="ffmpeg required")
+def test_extract_audio_respects_sample_rate_and_channels(tmp_path):
+    source = tmp_path / "tone.wav"
+    subprocess.run([
+        "ffmpeg", "-v", "error", "-f", "lavfi",
+        "-i", "sine=frequency=440:sample_rate=16000:duration=0.2",
+        "-ac", "1", str(source),
+    ], check=True)
+    stereo = tmp_path / "stereo.wav"
+    extract_audio(source, stereo, sample_rate=44100, channels=2)
+    waveform, sr = sf.read(stereo)
+    assert sr == 44100
+    assert waveform.ndim == 2
+    assert waveform.shape[1] == 2

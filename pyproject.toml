@@ -32,6 +32,7 @@ all = [
 ]
 seedance = ["fal-client>=0.7", "python-dotenv>=1.0"]
 wan3 = ["fal-client>=0.7", "python-dotenv>=1.0"]
+orchestrator = ["demucs>=4.0", "fal-client>=0.7", "python-dotenv>=1.0"]
 dev = ["pytest>=8.0", "httpx>=0.28", "fal-client>=0.7", "python-dotenv>=1.0"]
 
 [project.scripts]
@@ -40,6 +41,7 @@ media-timeline-benchmark = "media_timeline.benchmark:main"
 seedance = "seedance.cli:main"
 wan3 = "wan3.cli:main"
 vstack = "vstack.cli:main"
+orchestrate = "orchestrator.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

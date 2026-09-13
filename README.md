@@ -242,3 +242,22 @@ curl -s http://127.0.0.1:8003/v1/compose \
 
 `--resolution` is `1080p` (1080x1920) by default, or `720p` (720x1280).
 
+## Orchestrator (vocals → Wan 3 → stack)
+
+In-process chain: extract a mix WAV, Demucs `vocals.wav`, Wan 3.0 Prime reaction clip, then `vstack` with Wan 3 on top and the source video (plus soundtrack) on the bottom. Does **not** run the full media-timeline ASR/events pipeline. Fal rejects reference audio longer than 15s; the orchestrator fails before calling Wan 3.
+
+```bash
+cp .env.example .env   # set FAL_KEY
+.venv/bin/pip install -e '.[orchestrator,dev]'
+.venv/bin/orchestrate input.mp4 -o outputs/vstack/stacked.mp4 --work-dir outputs/run
+```
+
+`--work-dir` keeps `mix.wav`, `vocals.wav`, and `wan3.mp4`. Without it, intermediates are written to a temp directory and deleted after the stacked file is written. Optional flags: `--resolution` (`720p`/`1080p`), `--prompt`, `--wan3-resolution`, `--seed`.
+
+HTTP (long-running, same blocking tradeoff as Wan 3 `POST /v1/generate`):
+
+```bash
+uvicorn orchestrator.api:app --host 127.0.0.1 --port 8004
+curl -s http://127.0.0.1:8004/v1/orchestrate -F 'video=@input.mp4' -o stacked.mp4
+```
+
